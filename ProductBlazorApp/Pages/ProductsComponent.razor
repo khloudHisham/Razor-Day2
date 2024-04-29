@@ -1,0 +1,106 @@
+﻿@page "/ProductOld"
+<PageTitle>Product </PageTitle>
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        width: 200px;
+        margin: 20px;
+        text-align: center;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        padding: 20px;
+    }
+        .card img {
+            width: 150px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+</style>
+
+
+<div class="card-container">
+    @foreach (var product in Products)
+    {
+        <div class="card">
+            <img src="/images/@product.Image" alt="prod img">
+            <div class="container">
+                <h4><b>@product.Name</b></h4>
+                <p>Price: $@product.Price</p>
+            </div>
+        </div>
+    }
+</div>
+<select class="form form-control"
+        @bind="productid"
+        @bind:event="oninput"
+        @onchange="LoadProduct">
+    @foreach (var item in Products)
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
+</select>
+<!--prod Drop down list-->
+<div class="card">
+    @if (Product != null)
+    {
+        <img src="/images/@Product.Image" alt="prod img">
+
+        <div class="container">
+            <h4><b>@Product.Name</b></h4>
+            <p>Price: $@Product.Price</p>
+        </div>
+    }
+</div>
+
+@code {
+    public int productid { get; set; }
+    public Product Product { get; set; }
+    public List<Product> Products { get; set; }
+
+    public ProductsComponent()
+    {
+        Products = new List<Product>();
+
+        Products = new List<Product>
+        {
+            new Product
+            {
+                Id = 1,
+                Name = "Phone",
+                Image = "p1.jpg",
+                Price = 50
+            },
+            new Product
+            {
+                Id = 2,
+                Name = "Laptop",
+                Image = "laptop.jpg",
+                Price = 800
+            },
+             new Product
+            {
+                Id = 3,
+                Name = "Camera",
+                Image = "camera.jpg",
+                Price = 2800
+            },
+            new Product
+            {
+                Id = 4,
+                Name = "Alarm",
+                Image = "alarm.jpg",
+                Price = 5800
+            },
+        };
+    }
+    void LoadProduct()
+    {
+        Product = Products.FirstOrDefault(d => d.Id == productid);
+    }
+}

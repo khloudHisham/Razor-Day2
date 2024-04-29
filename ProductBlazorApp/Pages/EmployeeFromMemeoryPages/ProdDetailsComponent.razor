@@ -1,0 +1,32 @@
+﻿@page "/Product/Details/{id:int}"
+
+@using ProductBlazorApp.Services
+<h3>ProductDetailsComponent</h3>
+@if (ProObj != null)
+{
+    <h3>@ProObj.Name</h3>
+    <h4>@ProObj.Price</h4>
+    <img src="/images/@ProObj.Image" style="width:200px" />
+    <h4>@ProObj.CatId</h4>
+}
+else
+{
+    <h3>Wait Or Id invalid</h3>
+}
+
+<a href="/Product">Back To List</a>
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public Product ProObj { get; set; }
+
+    [Inject]
+    public IServies<Product> ProductService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ProObj = ProductService.getById(id);
+        base.OnInitialized();
+    }
+}

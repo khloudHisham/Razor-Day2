@@ -1,0 +1,66 @@
+﻿ @page "/Product/Edit/{id:int}"
+<h3>EditProductCompoent</h3>
+@if (ProObj != null)
+{
+    <EditForm Model="ProObj" OnSubmit="Save">
+        <div>
+            <label>Name</label>
+            <InputText class="form form-control" @bind-Value="ProObj.Name"></InputText>
+        </div>
+        <div>
+            <label>Price</label>
+            <InputNumber class="form form-control" @bind-Value="ProObj.Price"></InputNumber>
+        </div>
+        <div>
+            <label>Image</label>
+            <InputText class="form form-control" @bind-Value="ProObj.Image"></InputText>
+        </div>
+        <div>
+            <label>Category</label>
+            <InputSelect class="form form-control" @bind-Value="ProObj.CatId">
+                @foreach (var deptItem in catList)
+                {
+                    <option value="@deptItem.Id">@deptItem.Name</option>
+                }
+            </InputSelect>
+        </div>
+        <input type="submit" class="btn btn-success" value="Save" />
+    </EditForm>
+    <div style="border:2px solid green">
+        @ProObj.Name - @ProObj.Price - @ProObj.Image - @ProObj.CatId
+    </div>
+}
+else
+{
+    <h2>Wait or invalid id</h2>
+}
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public Product ProObj { get; set; }
+    public List<Category> catList { get; set; }
+
+    [Inject]
+    public IServies<Product> ProductService { get; set; }
+
+    [Inject]
+    public IServies<Category> CategoryService{ get; set; }
+
+    [Inject]
+    public NavigationManager NavManager { get; set; }//built in service already register IOC
+
+    protected override void OnInitialized()
+    {
+        ProObj = ProductService.getById(id);
+        catList= CategoryService.getAll();//Select
+        base.OnInitialized();
+    }
+    void Save()
+    {
+        //PUT
+        Console.WriteLine("Data Save");
+        NavManager.NavigateTo("/Product");
+    }
+}
+ 

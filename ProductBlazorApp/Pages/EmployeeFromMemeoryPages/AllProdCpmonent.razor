@@ -1,0 +1,35 @@
+﻿@page "/Product"
+<h3>AllProductsCpmonent</h3>
+@if (Prods != null)
+{
+    <table class="table table-hover">
+        @foreach (var item in Prods)
+        {
+            <tr>
+                <td> @item.Name</td>
+                <td><a href="/Product/Details/@item.Id">Details</a></td>
+                <td><a href="/Product/Edit/@item.Id">Edit</a></td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h2>Wait  </h2>
+}
+
+
+
+@code {
+    [Inject]
+    public IServies<Product> ProductService { get; set; }
+
+    public List<Product> Prods { get; set; }
+
+    protected override void OnInitialized()
+    {
+        
+        Prods = ProductService.getAll();
+        base.OnInitialized();
+    }
+}
